@@ -16,7 +16,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.IntStream;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
@@ -53,6 +52,16 @@ public class OrderControllerTest {
         assertEquals(order.getUser().getUsername(), actualOrder.getUser().getUsername());
         assertEquals(order.getItems().size(), actualOrder.getItems().size());
         assertArrayEquals(order.getItems().toArray(), actualOrder.getItems().toArray());
+    }
+
+    @Test
+    public void submitWithIncorrectUsernameTest(){
+        ResponseEntity<UserOrder> submitResponse = orderController.submit("IncorrectUsername");
+        assertNotNull(submitResponse);
+        assertEquals(TestUtils.NOT_FOUND_RESPONSE, submitResponse.getStatusCodeValue());
+
+        UserOrder actualOrder = submitResponse.getBody();
+        assertNull(actualOrder);
     }
 
     private User getUser(){
